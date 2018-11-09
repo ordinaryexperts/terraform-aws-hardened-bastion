@@ -10,7 +10,10 @@ output "bastion_dns" {
   value = "${aws_route53_record.nlb.*.fqdn}"
 }
 
+output "bastion_sg" {
+  value = "${aws_security_group.this.id}"
+}
+
 output "bastion_to_instance_sg" {
   value = "${aws_security_group.bastion_to_instance_sg.id}"
 }
-
