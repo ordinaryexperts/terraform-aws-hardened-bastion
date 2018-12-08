@@ -207,6 +207,12 @@ resource "aws_autoscaling_group" "this" {
   termination_policies = ["OldestLaunchConfiguration"]
   force_delete = true
 
+  tag {
+    key                 = "Name"
+    value               = "${terraform.workspace}-bastion-asg-launch-configuration-"
+    propagate_at_launch = true
+  }
+
   lifecycle {
     create_before_destroy = true
   }
