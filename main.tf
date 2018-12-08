@@ -209,7 +209,7 @@ resource "aws_autoscaling_group" "this" {
 
   tag {
     key                 = "Name"
-    value               = "${terraform.workspace}-bastion-asg-launch-configuration-"
+    value               = "${aws_launch_configuration.this.name}"
     propagate_at_launch = true
   }
 
