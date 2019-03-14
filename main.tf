@@ -5,6 +5,7 @@ data "aws_region" "current" {}
 data "aws_availability_zones" "current" {}
 data "aws_ami" "amazonlinux" {
   most_recent = true
+  owners = ["amazon"]
 
   filter {
     name   = "owner-alias"
