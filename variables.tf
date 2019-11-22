@@ -1,6 +1,6 @@
 variable "region" {
   description = "AWS Region"
-  default = ""
+  default     = ""
 }
 
 variable "vpc_id" {
@@ -8,53 +8,53 @@ variable "vpc_id" {
 }
 
 variable "cidr_whitelist" {
-  type = "list"
+  type        = list(string)
   description = "List of CIDRs allowed to access ssh on the bastion host"
 }
 
 variable "bucket_name" {
   description = "Name for the bastion s3 bucket. Optional, defaults to workspace-bastion-storage"
-  default = ""
+  default     = ""
 }
 
 variable "enable_bucket_versioning" {
   description = "Enable bucket versioning on bastion s3 bucket"
-  default = true
+  default     = true
 }
 
 variable "asg_subnets" {
-  type = "list"
+  type        = list(string)
   description = "List of subnet IDs for the ASG"
 }
 
 variable "lb_subnets" {
-  type = "list"
+  type        = list(string)
   description = "List of subnet IDs for the NLB"
 }
 
 variable "desired_count" {
   description = "Desired count for the bastion ASG"
-  default = 1
+  default     = 1
 }
 
 variable "max_count" {
   description = "Max count for the bastion ASG"
-  default = 2
+  default     = 2
 }
 
 variable "min_count" {
   description = "Min count for the bastion ASG"
-  default = 1
+  default     = 1
 }
 
 variable "instance_type" {
   description = "Instance type for the bastion host. Default = t2.nano"
-  default = "t2.nano"
+  default     = "t2.nano"
 }
 
 variable "associate_public_ip_address" {
   description = "Associate public IP address to bastion host instances"
-  default = false
+  default     = false
 }
 
 variable "key_name" {
@@ -63,15 +63,16 @@ variable "key_name" {
 
 variable "create_route53_record" {
   description = "Create an A record in route 53 for the NLB. If true, hosted_zone is required."
-  default = false
+  default     = false
 }
 
 variable "hosted_zone" {
   description = "Name of the route53 hosted zone to add a bastion record"
-  default = ""
+  default     = ""
 }
 
 variable "dns_record_name" {
   description = "Name for the A record added to the hosted zone"
-  default = "bastion"
+  default     = "bastion"
 }
+
