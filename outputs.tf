@@ -17,4 +17,3 @@ output "bastion_sg" {
 output "bastion_to_instance_sg" {
   value = aws_security_group.bastion_to_instance_sg.id
 }
-
