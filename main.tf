@@ -44,7 +44,6 @@ data "template_file" "sync_users" {
 
 resource "aws_s3_bucket" "this" {
   bucket = coalesce(var.bucket_name, "${terraform.workspace}-bastion-storage")
-  acl    = "bucket-owner-full-control"
 
   versioning {
     enabled = var.enable_bucket_versioning
