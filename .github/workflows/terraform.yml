@@ -1,0 +1,39 @@
+name: Quick Tests
+on:
+  push:
+  # Scheduled runs ensure we are alerted to incompatibilities in new releases
+  # of Terraform.
+  schedule:
+    - cron: '0 10 * * 3'
+
+jobs:
+
+  terraform:
+    name: Terraform Validation
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version:
+          - "latest"
+          - "1.0.7"
+
+    steps:
+
+      - uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: '${{ matrix.version }}'
+
+      - uses: actions/checkout@v2
+
+      - name: Terraform fmt
+        id: fmt
+        run: terraform fmt -check
+        continue-on-error: true
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
