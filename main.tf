@@ -91,9 +91,9 @@ resource "aws_security_group" "bastion_to_instance_sg" {
   vpc_id      = var.vpc_id
 
   ingress {
-    protocol  = "tcp"
-    from_port = 22
-    to_port   = 22
+    protocol        = "tcp"
+    from_port       = 22
+    to_port         = 22
     security_groups = [
       aws_security_group.this.id,
     ]
@@ -161,10 +161,11 @@ resource "aws_lb" "this" {
 }
 
 resource "aws_lb_target_group" "this" {
-  port        = 22
-  protocol    = "TCP"
-  vpc_id      = var.vpc_id
-  target_type = "instance"
+  port                 = 22
+  protocol             = "TCP"
+  vpc_id               = var.vpc_id
+  target_type          = "instance"
+  deregistration_delay = 0
 
   health_check {
     port     = "traffic-port"
