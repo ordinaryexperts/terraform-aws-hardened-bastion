@@ -1,0 +1,26 @@
+name: Terraform Static Analysis
+on:
+  push:
+  # Scheduled runs ensure we are alerted if a newer version of Checkov finds
+  # problems with our code.
+  schedule:
+    - cron: '0 10 * * 3'
+
+jobs:
+
+  checkov_baseline:
+    name: Baseline Static Analysis
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+
+    steps:
+
+      - uses: actions/checkout@v2
+
+      - name: Checkov baseline static analysis
+        id: checkov
+        uses: bridgecrewio/checkov-action@master
+        with:
+          baseline: "${{ matrix.item }}/.checkov.baseline"
+          quiet: true
