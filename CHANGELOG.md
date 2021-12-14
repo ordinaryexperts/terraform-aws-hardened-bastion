@@ -4,6 +4,7 @@ Unreleased
 * Update AWS provider required version to ~> 3.0
 * Checkov baseline static analysis.  All issues flagged by Checkov have *not*
   yet been resolved.
+* Status badges for validation and static analysis
 
 1.1.0
 =====
