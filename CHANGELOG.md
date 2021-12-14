@@ -5,7 +5,8 @@ Unreleased
 * Checkov baseline static analysis.  All issues flagged by Checkov have *not*
   yet been resolved.
 * Status badges for validation and static analysis
-* Improved naming of autoscaling group and launch configuration
+* Improved naming of autoscaling group and launch configuration, so that ASG is
+  not re-created every time `terraform apply` is run.
 * `tags` variable allows tagging of bastion
 
 1.1.0
