@@ -1,6 +1,6 @@
 locals {
   region = coalesce(var.region, data.aws_region.current.name)
-  name = "${terraform.workspace}-basion"
+  name = "${terraform.workspace}-bastion"
 }
 
 data "aws_region" "current" {
