@@ -22,5 +22,5 @@ jobs:
         id: checkov
         uses: bridgecrewio/checkov-action@master
         with:
-          baseline: "${{ matrix.item }}/.checkov.baseline"
+          baseline: .checkov.baseline
           quiet: true
