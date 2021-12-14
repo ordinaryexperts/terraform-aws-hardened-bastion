@@ -1,5 +1,5 @@
 locals {
-  region = coalesce(var.region, data.aws_region.current.name)
+  region   = coalesce(var.region, data.aws_region.current.name)
   asg_name = "${terraform.workspace}-bastion"
 }
 
@@ -57,12 +57,15 @@ resource "aws_s3_bucket" "this" {
   versioning {
     enabled = var.enable_bucket_versioning
   }
+
+  tags = var.tags
 }
 
 resource "aws_security_group" "this" {
   name_prefix = "${terraform.workspace}-bastion-sg-"
   vpc_id      = var.vpc_id
   description = "Bastion security group (only SSH inbound access is allowed)"
+  tags        = var.tags
 
   # Only 22 inbound
   ingress {
@@ -90,6 +93,7 @@ resource "aws_security_group" "this" {
 resource "aws_security_group" "bastion_to_instance_sg" {
   name_prefix = "${terraform.workspace}-bastion-to-instance-sg-"
   vpc_id      = var.vpc_id
+  tags        = var.tags
 
   ingress {
     protocol        = "tcp"
@@ -99,6 +103,7 @@ resource "aws_security_group" "bastion_to_instance_sg" {
       aws_security_group.this.id,
     ]
   }
+
 }
 
 data "aws_iam_policy_document" "assume" {
@@ -139,6 +144,7 @@ data "aws_iam_policy_document" "role_policy" {
 resource "aws_iam_role" "this" {
   name_prefix = "${terraform.workspace}-bastion-role-"
   path        = "/bastion/"
+  tags        = var.tags
 
   assume_role_policy = data.aws_iam_policy_document.assume.json
 }
@@ -153,12 +159,13 @@ resource "aws_iam_instance_profile" "this" {
   name_prefix = "${terraform.workspace}-bastion-profile-"
   role        = aws_iam_role.this.name
   path        = "/bastion/"
+  tags        = var.tags
 }
 
 resource "aws_lb" "this" {
-  subnets = var.lb_subnets
-
+  subnets            = var.lb_subnets
   load_balancer_type = "network"
+  tags               = var.tags
 }
 
 resource "aws_lb_target_group" "this" {
@@ -167,6 +174,7 @@ resource "aws_lb_target_group" "this" {
   vpc_id               = var.vpc_id
   target_type          = "instance"
   deregistration_delay = 0
+  tags                 = var.tags
 
   health_check {
     port     = "traffic-port"
@@ -183,6 +191,7 @@ resource "aws_lb_listener" "ssh" {
   load_balancer_arn = aws_lb.this.arn
   port              = 22
   protocol          = "TCP"
+  tags              = var.tags
 }
 
 data "aws_route53_zone" "nlb" {
@@ -223,6 +232,15 @@ resource "aws_autoscaling_group" "this" {
     key                 = "Name"
     value               = aws_launch_configuration.this.name
     propagate_at_launch = true
+  }
+
+  dynamic "tag" {
+    for_each = var.tags
+    content {
+      key                 = tag.key
+      value               = tag.value
+      propagate_at_launch = true
+    }
   }
 
   lifecycle {

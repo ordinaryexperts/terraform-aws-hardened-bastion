@@ -6,6 +6,7 @@ Unreleased
   yet been resolved.
 * Status badges for validation and static analysis
 * Improved naming of autoscaling group and launch configuration
+* `tags` variable allows tagging of bastion
 
 1.1.0
 =====

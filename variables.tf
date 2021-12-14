@@ -75,3 +75,7 @@ variable "dns_record_name" {
   description = "Name for the A record added to the hosted zone"
   default     = "bastion"
 }
+
+variable "tags" {
+  default = {}
+}
