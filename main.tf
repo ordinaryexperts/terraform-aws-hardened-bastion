@@ -1,6 +1,6 @@
 locals {
   region = coalesce(var.region, data.aws_region.current.name)
-  name = "${terraform.workspace}-bastion"
+  bastion_name = "${terraform.workspace}-bastion"
 }
 
 data "aws_region" "current" {
@@ -205,7 +205,7 @@ resource "aws_route53_record" "nlb" {
 }
 
 resource "aws_autoscaling_group" "this" {
-  name                 = local.name
+  name                 = local.bastion_name
   launch_configuration = aws_launch_configuration.this.name
   max_size             = var.max_count
   min_size             = var.min_count
@@ -231,7 +231,7 @@ resource "aws_autoscaling_group" "this" {
 }
 
 resource "aws_launch_configuration" "this" {
-  name_prefix                 = "${local.name}-"
+  name_prefix                 = "${local.bastion_name}-"
   image_id                    = data.aws_ami.amazonlinux.id
   instance_type               = var.instance_type
   associate_public_ip_address = var.associate_public_ip_address
