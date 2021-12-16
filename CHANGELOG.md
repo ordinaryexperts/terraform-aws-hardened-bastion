@@ -8,6 +8,9 @@ Unreleased
 * Improved naming of autoscaling group and launch configuration, so that ASG is
   not re-created every time `terraform apply` is run.
 * `tags` variable allows tagging of bastion
+* Ignore changes on launch configuration user_data.  This prevents the launch
+  configuration from being updated on every apply, even when nothing has
+  changed.
 
 1.1.0
 =====
