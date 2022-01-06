@@ -214,7 +214,7 @@ resource "aws_route53_record" "nlb" {
 }
 
 resource "aws_autoscaling_group" "this" {
-  name_prefix          = local.asg_name
+  name_prefix          = "${local.asg_name}-"
   launch_configuration = aws_launch_configuration.this.name
   max_size             = var.max_count
   min_size             = var.min_count
