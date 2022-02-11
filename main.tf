@@ -195,8 +195,9 @@ resource "aws_lb_listener" "ssh" {
 }
 
 data "aws_route53_zone" "nlb" {
-  count = var.create_route53_record ? 1 : 0
-  name  = var.hosted_zone
+  count  = var.create_route53_record ? 1 : 0
+  name   = var.hosted_zone
+  vpc_id = var.vpc_id
 }
 
 resource "aws_route53_record" "nlb" {
