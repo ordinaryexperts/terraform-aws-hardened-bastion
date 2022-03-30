@@ -11,6 +11,11 @@ Unreleased
 * Ignore changes on launch configuration user_data.  This prevents the launch
   configuration from being updated on every apply, even when nothing has
   changed.
+* Checkov baseline static analysis.  All issues flagged by Checkov have *not*
+  yet been resolved.
+* Status badges for validation and static analysis
+* Lifecycle ignore changes on S3 bucket grant, as workaround for TF wanting
+  constantly to re-grant the same grant
 
 1.1.0
 =====
