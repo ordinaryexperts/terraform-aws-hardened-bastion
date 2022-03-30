@@ -6,6 +6,8 @@
                 {
                     "resource": "aws_s3_bucket.this",
                     "check_ids": [
+                        "CKV2_AWS_40",
+                        "CKV2_AWS_41",
                         "CKV2_AWS_6",
                         "CKV_AWS_144",
                         "CKV_AWS_145",
@@ -29,7 +31,6 @@
                 {
                     "resource": "aws_lb.this",
                     "check_ids": [
-                        "CKV2_AWS_28",
                         "CKV_AWS_150",
                         "CKV_AWS_152",
                         "CKV_AWS_91"
@@ -38,6 +39,7 @@
                 {
                     "resource": "aws_launch_configuration.this",
                     "check_ids": [
+                        "CKV_AWS_79",
                         "CKV_AWS_8"
                     ]
                 }
