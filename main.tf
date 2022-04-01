@@ -1,6 +1,6 @@
 locals {
   region   = coalesce(var.region, data.aws_region.current.name)
-  asg_name = "${terraform.workspace}-bastion"
+  bastion_name = "${var.network_name}-bastion"
 }
 
 data "aws_region" "current" {
@@ -46,7 +46,7 @@ data "template_file" "sync_users" {
 data "aws_canonical_user_id" "current_user" {}
 
 resource "aws_s3_bucket" "this" {
-  bucket = coalesce(var.bucket_name, "${terraform.workspace}-bastion-storage")
+  bucket = coalesce(var.bucket_name, "${local.bastion_name}-storage")
 
   grant {
     id          = data.aws_canonical_user_id.current_user.id
@@ -68,7 +68,7 @@ resource "aws_s3_bucket" "this" {
 }
 
 resource "aws_security_group" "this" {
-  name_prefix = "${terraform.workspace}-bastion-sg-"
+  name_prefix = "${local.bastion_name}-sg-"
   vpc_id      = var.vpc_id
   description = "Bastion security group (only SSH inbound access is allowed)"
   tags        = var.tags
@@ -97,7 +97,7 @@ resource "aws_security_group" "this" {
 
 # exported sg to add to ssh reachable private instances
 resource "aws_security_group" "bastion_to_instance_sg" {
-  name_prefix = "${terraform.workspace}-bastion-to-instance-sg-"
+  name_prefix = "${local.bastion_name}-to-instance-sg-"
   vpc_id      = var.vpc_id
   tags        = var.tags
 
@@ -148,7 +148,7 @@ data "aws_iam_policy_document" "role_policy" {
 }
 
 resource "aws_iam_role" "this" {
-  name_prefix = "${terraform.workspace}-bastion-role-"
+  name_prefix = "${local.bastion_name}-role-"
   path        = "/bastion/"
   tags        = var.tags
 
@@ -156,13 +156,13 @@ resource "aws_iam_role" "this" {
 }
 
 resource "aws_iam_role_policy" "this" {
-  name_prefix = "${terraform.workspace}-bastion-policy-"
+  name_prefix = "${local.bastion_name}-policy-"
   role        = aws_iam_role.this.id
   policy      = data.aws_iam_policy_document.role_policy.json
 }
 
 resource "aws_iam_instance_profile" "this" {
-  name_prefix = "${terraform.workspace}-bastion-profile-"
+  name_prefix = "${local.bastion_name}-profile-"
   role        = aws_iam_role.this.name
   path        = "/bastion/"
   tags        = var.tags
@@ -220,7 +220,7 @@ resource "aws_route53_record" "nlb" {
 }
 
 resource "aws_autoscaling_group" "this" {
-  name_prefix          = "${local.asg_name}-"
+  name_prefix          = "${local.bastion_name}-"
   launch_configuration = aws_launch_configuration.this.name
   max_size             = var.max_count
   min_size             = var.min_count
@@ -255,7 +255,7 @@ resource "aws_autoscaling_group" "this" {
 }
 
 resource "aws_launch_configuration" "this" {
-  name_prefix                 = "${local.asg_name}-"
+  name_prefix                 = "${local.bastion_name}-"
   image_id                    = data.aws_ami.amazonlinux.id
   instance_type               = var.instance_type
   associate_public_ip_address = var.associate_public_ip_address

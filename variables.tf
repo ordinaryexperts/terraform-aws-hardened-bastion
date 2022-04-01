@@ -79,3 +79,8 @@ variable "dns_record_name" {
 variable "tags" {
   default = {}
 }
+
+variable "network_name" {
+  type = string
+  description = "Name of the network this bastion serves"
+}
