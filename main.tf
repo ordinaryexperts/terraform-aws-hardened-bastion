@@ -1,6 +1,6 @@
 locals {
   region   = coalesce(var.region, data.aws_region.current.name)
-  bastion_name = "${var.network_name}-bastion"
+  bastion_name = "$bastion-{var.network_name}"
 }
 
 data "aws_region" "current" {
