@@ -80,7 +80,7 @@ variable "tags" {
   default = {}
 }
 
-variable "network_name" {
+variable "vpc_name" {
   type = string
-  description = "Name of the network this bastion serves"
+  description = "Name of the VPC this bastion serves"
 }
