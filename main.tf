@@ -1,5 +1,6 @@
 locals {
-  region = coalesce(var.region, data.aws_region.current.name)
+  region   = coalesce(var.region, data.aws_region.current.name)
+  bastion_name = "${var.vpc_name}-bastion"
 }
 
 data "aws_region" "current" {
@@ -45,7 +46,7 @@ data "template_file" "sync_users" {
 data "aws_canonical_user_id" "current_user" {}
 
 resource "aws_s3_bucket" "this" {
-  bucket = coalesce(var.bucket_name, "${terraform.workspace}-bastion-storage")
+  bucket = coalesce(var.bucket_name, "${local.bastion_name}-storage")
 
   grant {
     id          = data.aws_canonical_user_id.current_user.id
@@ -56,12 +57,21 @@ resource "aws_s3_bucket" "this" {
   versioning {
     enabled = var.enable_bucket_versioning
   }
+
+  tags = var.tags
+
+  # Workaround for issue where live infrastructure never conforms with TF,
+  # making TF constantly want to re-grant the same grant.
+  lifecycle {
+    ignore_changes = [grant]
+  }
 }
 
 resource "aws_security_group" "this" {
-  name_prefix = "${terraform.workspace}-bastion-sg-"
+  name_prefix = "${local.bastion_name}-sg-"
   vpc_id      = var.vpc_id
   description = "Bastion security group (only SSH inbound access is allowed)"
+  tags        = var.tags
 
   # Only 22 inbound
   ingress {
@@ -87,8 +97,9 @@ resource "aws_security_group" "this" {
 
 # exported sg to add to ssh reachable private instances
 resource "aws_security_group" "bastion_to_instance_sg" {
-  name_prefix = "${terraform.workspace}-bastion-to-instance-sg-"
+  name_prefix = "${local.bastion_name}-to-instance-sg-"
   vpc_id      = var.vpc_id
+  tags        = var.tags
 
   ingress {
     protocol        = "tcp"
@@ -98,6 +109,7 @@ resource "aws_security_group" "bastion_to_instance_sg" {
       aws_security_group.this.id,
     ]
   }
+
 }
 
 data "aws_iam_policy_document" "assume" {
@@ -136,28 +148,30 @@ data "aws_iam_policy_document" "role_policy" {
 }
 
 resource "aws_iam_role" "this" {
-  name_prefix = "${terraform.workspace}-bastion-role-"
+  name_prefix = "${local.bastion_name}-role-"
   path        = "/bastion/"
+  tags        = var.tags
 
   assume_role_policy = data.aws_iam_policy_document.assume.json
 }
 
 resource "aws_iam_role_policy" "this" {
-  name_prefix = "${terraform.workspace}-bastion-policy-"
+  name_prefix = "${local.bastion_name}-policy-"
   role        = aws_iam_role.this.id
   policy      = data.aws_iam_policy_document.role_policy.json
 }
 
 resource "aws_iam_instance_profile" "this" {
-  name_prefix = "${terraform.workspace}-bastion-profile-"
+  name_prefix = "${local.bastion_name}-profile-"
   role        = aws_iam_role.this.name
   path        = "/bastion/"
+  tags        = var.tags
 }
 
 resource "aws_lb" "this" {
-  subnets = var.lb_subnets
-
+  subnets            = var.lb_subnets
   load_balancer_type = "network"
+  tags               = var.tags
 }
 
 resource "aws_lb_target_group" "this" {
@@ -166,6 +180,7 @@ resource "aws_lb_target_group" "this" {
   vpc_id               = var.vpc_id
   target_type          = "instance"
   deregistration_delay = 0
+  tags                 = var.tags
 
   health_check {
     port     = "traffic-port"
@@ -182,6 +197,7 @@ resource "aws_lb_listener" "ssh" {
   load_balancer_arn = aws_lb.this.arn
   port              = 22
   protocol          = "TCP"
+  tags              = var.tags
 }
 
 data "aws_route53_zone" "nlb" {
@@ -204,7 +220,7 @@ resource "aws_route53_record" "nlb" {
 }
 
 resource "aws_autoscaling_group" "this" {
-  name                 = aws_launch_configuration.this.name
+  name_prefix          = "${local.bastion_name}-"
   launch_configuration = aws_launch_configuration.this.name
   max_size             = var.max_count
   min_size             = var.min_count
@@ -224,13 +240,22 @@ resource "aws_autoscaling_group" "this" {
     propagate_at_launch = true
   }
 
+  dynamic "tag" {
+    for_each = var.tags
+    content {
+      key                 = tag.key
+      value               = tag.value
+      propagate_at_launch = true
+    }
+  }
+
   lifecycle {
     create_before_destroy = true
   }
 }
 
 resource "aws_launch_configuration" "this" {
-  name_prefix                 = "${terraform.workspace}-bastion-asg-launch-configuration-"
+  name_prefix                 = "${local.bastion_name}-"
   image_id                    = data.aws_ami.amazonlinux.id
   instance_type               = var.instance_type
   associate_public_ip_address = var.associate_public_ip_address
@@ -244,6 +269,10 @@ resource "aws_launch_configuration" "this" {
 
   lifecycle {
     create_before_destroy = true
+
+    # If we do not ignore changes, user_data will be updated on every apply,
+    # even if nothing has changed.
+    ignore_changes = [user_data]
   }
 }
 
