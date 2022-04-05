@@ -1,4 +1,4 @@
-name: Quick Tests
+name: Terraform Validation
 on:
   push:
   # Scheduled runs ensure we are alerted to incompatibilities in new releases
@@ -9,7 +9,7 @@ on:
 jobs:
 
   terraform:
-    name: Terraform Validation
+    name: Validation
     runs-on: ubuntu-latest
     strategy:
       matrix:
