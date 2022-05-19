@@ -1,6 +1,8 @@
 Unreleased
 ==========
 
+* Add a Makefile for convenience
+
 2.0.0
 =====
 
