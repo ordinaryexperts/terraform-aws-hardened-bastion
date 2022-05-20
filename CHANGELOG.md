@@ -1,6 +1,15 @@
 Unreleased
 ==========
 
+2.1.0
+=====
+
+* Add a Makefile for convenience
+* Update syntax for `aws_s3_bucket`
+* Remove `lifecycle ignore_changes` workaround for issue where live
+  infrastructure never conformed with TF, making TF constantly want to re-grant
+  the same grant.  Issue was eliminated after the switch to new syntax.
+
 2.0.0
 =====
 

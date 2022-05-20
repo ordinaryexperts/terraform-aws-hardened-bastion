@@ -81,6 +81,6 @@ variable "tags" {
 }
 
 variable "vpc_name" {
-  type = string
+  type        = string
   description = "Name of the VPC this bastion serves"
 }
