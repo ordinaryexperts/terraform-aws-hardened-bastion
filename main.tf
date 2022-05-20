@@ -47,14 +47,7 @@ data "aws_canonical_user_id" "current_user" {}
 
 resource "aws_s3_bucket" "this" {
   bucket = coalesce(var.bucket_name, "${local.bastion_name}-storage")
-
-  tags = var.tags
-
-  #  # Workaround for issue where live infrastructure never conforms with TF,
-  #  # making TF constantly want to re-grant the same grant.
-  #  lifecycle {
-  #    ignore_changes = [grant]
-  #  }
+  tags   = var.tags
 }
 
 resource "aws_s3_bucket_acl" "this" {
