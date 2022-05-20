@@ -50,11 +50,11 @@ resource "aws_s3_bucket" "this" {
 
   tags = var.tags
 
-    # Workaround for issue where live infrastructure never conforms with TF,
-    # making TF constantly want to re-grant the same grant.
-    lifecycle {
-      ignore_changes = [grant]
-    }
+  #  # Workaround for issue where live infrastructure never conforms with TF,
+  #  # making TF constantly want to re-grant the same grant.
+  #  lifecycle {
+  #    ignore_changes = [grant]
+  #  }
 }
 
 resource "aws_s3_bucket_acl" "this" {
