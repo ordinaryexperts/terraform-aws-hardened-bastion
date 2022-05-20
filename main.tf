@@ -1,5 +1,5 @@
 locals {
-  region   = coalesce(var.region, data.aws_region.current.name)
+  region       = coalesce(var.region, data.aws_region.current.name)
   bastion_name = "${var.vpc_name}-bastion"
 }
 
@@ -47,23 +47,31 @@ data "aws_canonical_user_id" "current_user" {}
 
 resource "aws_s3_bucket" "this" {
   bucket = coalesce(var.bucket_name, "${local.bastion_name}-storage")
+  tags   = var.tags
+}
 
-  grant {
-    id          = data.aws_canonical_user_id.current_user.id
-    type        = "CanonicalUser"
-    permissions = ["FULL_CONTROL"]
+resource "aws_s3_bucket_acl" "this" {
+  bucket = aws_s3_bucket.this.id
+  access_control_policy {
+    grant {
+      grantee {
+        id   = data.aws_canonical_user_id.current_user.id
+        type = "CanonicalUser"
+      }
+      permission = "FULL_CONTROL"
+    }
+
+    owner {
+      id = data.aws_canonical_user_id.current_user.id
+    }
+
   }
+}
 
-  versioning {
-    enabled = var.enable_bucket_versioning
-  }
-
-  tags = var.tags
-
-  # Workaround for issue where live infrastructure never conforms with TF,
-  # making TF constantly want to re-grant the same grant.
-  lifecycle {
-    ignore_changes = [grant]
+resource "aws_s3_bucket_versioning" "this" {
+  bucket = aws_s3_bucket.this.id
+  versioning_configuration {
+    status = var.enable_bucket_versioning ? "Enabled" : "Disabled"
   }
 }
 
@@ -102,9 +110,9 @@ resource "aws_security_group" "bastion_to_instance_sg" {
   tags        = var.tags
 
   ingress {
-    protocol        = "tcp"
-    from_port       = 22
-    to_port         = 22
+    protocol  = "tcp"
+    from_port = 22
+    to_port   = 22
     security_groups = [
       aws_security_group.this.id,
     ]
