@@ -1,32 +1,10 @@
 #!/bin/bash -x
 
-#===============================================================================
-#
-# Hardening
-#
+
 #-------------------------------------------------------------------------------
-
-yum -y update --security
-amazon-linux-extras install epel -y
-pip3 install ansible
-ansible-galaxy install geerlingguy.security
-
-cat > /opt/playbook.yaml << EOF
-- hosts: localhost
-  gather_facts: true
-  roles:
-    - geerlingguy.security
-EOF
-
-ansible-playbook /opt/playbook.yaml
-#===============================================================================
-
-
-#===============================================================================
-#
 # Sync Users
-#
 #-------------------------------------------------------------------------------
+
 mkdir -p /usr/bin/bastion/
 cat > /usr/bin/bastion/sync_users << 'EOF'
 #!/usr/bin/env bash
@@ -87,3 +65,24 @@ crontab ~/mycron
 rm ~/mycron
 
 /usr/bin/bastion/sync_users
+
+
+#-------------------------------------------------------------------------------
+# Hardening
+#-------------------------------------------------------------------------------
+
+yum -y update --security
+amazon-linux-extras install epel -y
+pip3 install ansible
+ansible-galaxy install geerlingguy.security
+
+cat > /opt/playbook.yaml << EOF
+- hosts: localhost
+  gather_facts: true
+  roles:
+    - geerlingguy.security
+EOF
+
+ansible-playbook /opt/playbook.yaml
+
+
