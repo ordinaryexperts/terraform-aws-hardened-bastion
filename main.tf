@@ -277,11 +277,5 @@ resource "aws_launch_configuration" "this" {
 
   lifecycle {
     create_before_destroy = true
-
-    # If we do not ignore changes, user_data will be updated on every apply,
-    # even if nothing has changed.
-    ignore_changes = [user_data]
   }
 }
-
-# TODO: harden the instances, add route 53 entries
