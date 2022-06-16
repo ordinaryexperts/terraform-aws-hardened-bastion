@@ -79,6 +79,8 @@ ansible-galaxy install geerlingguy.security
 cat > /opt/playbook.yaml << EOF
 - hosts: localhost
   gather_facts: true
+  vars:
+    security_sudoers_passwordless: ${sudoers}
   roles:
     - geerlingguy.security
 EOF

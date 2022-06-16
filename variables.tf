@@ -84,3 +84,9 @@ variable "vpc_name" {
   type        = string
   description = "Name of the VPC this bastion serves"
 }
+
+variable "sudoers" {
+  type        = list(string)
+  description = "Usernames that will be granted passwordless sudo privilege"
+  default     = []
+}
