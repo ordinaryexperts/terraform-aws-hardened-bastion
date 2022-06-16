@@ -76,7 +76,7 @@ amazon-linux-extras install epel -y
 pip3 install ansible
 ansible-galaxy install geerlingguy.security
 
-cat > /opt/playbook.yaml << EOF
+cat > ~/playbook.yaml << EOF
 - hosts: localhost
   gather_facts: true
   vars:
@@ -85,6 +85,6 @@ cat > /opt/playbook.yaml << EOF
     - geerlingguy.security
 EOF
 
-ansible-playbook /opt/playbook.yaml
+ansible-playbook ~/playbook.yaml
 
 
