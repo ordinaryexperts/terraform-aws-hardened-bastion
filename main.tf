@@ -31,7 +31,7 @@ data "template_file" "user_data" {
     aws_region        = local.region
     bucket_name       = aws_s3_bucket.this.bucket
     sync_users_script = data.template_file.sync_users.rendered
-    sudoers           = var.sudoers
+    sudoers           = '[${join(", ", var.sudoers)}]'
   }
 }
 
