@@ -242,6 +242,11 @@ resource "aws_autoscaling_group" "this" {
   termination_policies = ["OldestLaunchConfiguration"]
   force_delete         = true
 
+  instance_refresh {
+    strategy = "Rolling"
+    triggers = ["tag"]
+  }
+
   tag {
     key                 = "Name"
     value               = aws_launch_configuration.this.name
