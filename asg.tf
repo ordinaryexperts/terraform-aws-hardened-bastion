@@ -18,7 +18,7 @@ data "template_file" "user_data" {
 
   vars = {
     aws_region        = local.region
-    bucket_name       = aws_s3_bucket.this.bucket
+    bucket_name       = aws_s3_bucket.keys.bucket
     sync_users_script = data.template_file.sync_users.rendered
     sudoers           = jsonencode(var.sudoers)
   }
@@ -29,7 +29,7 @@ data "template_file" "sync_users" {
 
   vars = {
     aws_region  = local.region
-    bucket_name = aws_s3_bucket.this.bucket
+    bucket_name = aws_s3_bucket.keys.bucket
   }
 }
 

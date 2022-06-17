@@ -33,9 +33,10 @@ resource "aws_security_group" "bastion_to_instance_sg" {
   name_prefix = "${local.bastion_name}-to-instance-sg-"
   vpc_id      = var.vpc_id
   tags        = var.tags
+  description = "SSH access from bastion to instances"
 
   ingress {
-    description = "SSH ingress from to instances"
+    description = "SSH ingress from bastion to instances"
     protocol    = "tcp"
     from_port   = 22
     to_port     = 22

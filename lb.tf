@@ -2,6 +2,12 @@ resource "aws_lb" "this" {
   subnets            = var.lb_subnets
   load_balancer_type = "network"
   tags               = var.tags
+
+  access_logs {
+    bucket  = aws_s3_bucket.logs.bucket
+    enabled = true
+  }
+
   # checkov:skip=CKV_AWS_152: No need for cross-zone load balancing when bastion only lives in a single AZ
   # checkov:skip=CKV_AWS_150: We don't want deletion protection enabled on this LB
 }

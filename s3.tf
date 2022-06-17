@@ -1,18 +1,20 @@
-resource "aws_s3_bucket" "this" {
+resource "aws_s3_bucket" "keys" {
   bucket = coalesce(var.bucket_name, "${local.bastion_name}-storage")
   tags   = var.tags
+  # checkov:skip=CKV_AWS_18: No need for S3 bucket access logging, since only bastion can read this bucket
+  # checkov:skip=CKV_AWS_144: No need for cross region replication since bastion is single-region
 }
 
-resource "aws_s3_bucket_public_access_block" "this" {
-  bucket                  = aws_s3_bucket.this.id
+resource "aws_s3_bucket_public_access_block" "keys" {
+  bucket                  = aws_s3_bucket.keys.id
   block_public_acls       = true
   block_public_policy     = true
   ignore_public_acls      = true
   restrict_public_buckets = true
 }
 
-resource "aws_s3_bucket_acl" "this" {
-  bucket = aws_s3_bucket.this.id
+resource "aws_s3_bucket_acl" "keys" {
+  bucket = aws_s3_bucket.keys.id
   access_control_policy {
     grant {
       grantee {
@@ -29,9 +31,54 @@ resource "aws_s3_bucket_acl" "this" {
   }
 }
 
-resource "aws_s3_bucket_versioning" "this" {
-  bucket = aws_s3_bucket.this.id
+resource "aws_s3_bucket_versioning" "keys" {
+  bucket = aws_s3_bucket.keys.id
   versioning_configuration {
     status = var.enable_bucket_versioning ? "Enabled" : "Disabled"
   }
 }
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "example" {
+  bucket = aws_s3_bucket.keys.bucket
+
+  rule {
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = aws_kms_key.this.arn
+      sse_algorithm     = "aws:kms"
+    }
+  }
+}
+
+resource "aws_s3_bucket" "logs" {
+  bucket = coalesce(var.bucket_name, "${local.bastion_name}-access-logs")
+  tags   = var.tags
+  # checkov:skip=CKV_AWS_18: No need for S3 bucket access logging, since only bastion can read this bucket
+  # checkov:skip=CKV_AWS_144: No need for cross region replication since bastion is single-region
+}
+
+resource "aws_s3_bucket_public_access_block" "logs" {
+  bucket                  = aws_s3_bucket.logs.id
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket_versioning" "logs" {
+  bucket = aws_s3_bucket.logs.id
+  versioning_configuration {
+    status = var.enable_bucket_versioning ? "Enabled" : "Disabled"
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "example" {
+  bucket = aws_s3_bucket.logs.bucket
+
+  rule {
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = aws_kms_key.this.arn
+      sse_algorithm     = "aws:kms"
+    }
+  }
+}
+
