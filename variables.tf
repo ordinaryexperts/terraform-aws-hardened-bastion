@@ -49,7 +49,7 @@ variable "min_count" {
 
 variable "instance_type" {
   description = "Instance type for the bastion host. Default = t2.nano"
-  default     = "t2.nano"
+  default     = "t3a.micro"  # nano is too weak to run ansible role geerlingguy.security
 }
 
 variable "associate_public_ip_address" {
