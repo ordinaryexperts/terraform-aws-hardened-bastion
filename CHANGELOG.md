@@ -1,6 +1,8 @@
 Unreleased
 ==========
 
+* Security hardening with Ansible role `geerlingguy.security`
+
 2.1.0
 =====
 
