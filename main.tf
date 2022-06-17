@@ -1,7 +1,6 @@
 locals {
   region         = coalesce(var.region, data.aws_region.current.name)
   bastion_name   = "${var.vpc_name}-bastion"
-  sudoers_string = join(", ", var.sudoers)
 }
 
 data "aws_region" "current" {
@@ -32,7 +31,7 @@ data "template_file" "user_data" {
     aws_region        = local.region
     bucket_name       = aws_s3_bucket.this.bucket
     sync_users_script = data.template_file.sync_users.rendered
-    sudoers           = "[${local.sudoers_string}]"
+    sudoers           = jsonencode(var.sudoers)
   }
 }
 
