@@ -234,7 +234,7 @@ resource "aws_autoscaling_group" "this" {
   max_size             = var.max_count
   min_size             = var.min_count
   desired_capacity     = var.desired_count
-  health_check_type    = "ELB"
+  health_check_type    = "EC2"
 
   vpc_zone_identifier = var.asg_subnets
 
