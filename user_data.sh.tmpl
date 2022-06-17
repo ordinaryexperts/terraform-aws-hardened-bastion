@@ -72,7 +72,7 @@ rm ~/mycron
 #-------------------------------------------------------------------------------
 
 yum -y update --security
-amazon-linux-extras install epel -y
+amazon-linux-extras install epel -y   # Required for Ansible role geerlingguy.security
 pip3 install ansible
 ansible-galaxy install geerlingguy.security
 
