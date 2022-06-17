@@ -51,6 +51,14 @@ resource "aws_s3_bucket" "this" {
   tags   = var.tags
 }
 
+resource "aws_s3_bucket_public_access_block" "this" {
+  bucket                  = aws_s3_bucket.this.id
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
 resource "aws_s3_bucket_acl" "this" {
   bucket = aws_s3_bucket.this.id
   access_control_policy {
@@ -84,15 +92,17 @@ resource "aws_security_group" "this" {
 
   # Only 22 inbound
   ingress {
-    protocol  = "tcp"
-    from_port = 22
-    to_port   = 22
+    description = "SSH access to bastion"
+    protocol    = "tcp"
+    from_port   = 22
+    to_port     = 22
 
     cidr_blocks = var.cidr_whitelist
   }
 
   # Anything outbound. Consider restricting
   egress {
+    description = "Egress from bastion"
     protocol    = -1
     from_port   = 0
     to_port     = 0
@@ -111,14 +121,16 @@ resource "aws_security_group" "bastion_to_instance_sg" {
   tags        = var.tags
 
   ingress {
-    protocol  = "tcp"
-    from_port = 22
-    to_port   = 22
+    description = "SSH ingress from to instances"
+    protocol    = "tcp"
+    from_port   = 22
+    to_port     = 22
     security_groups = [
       aws_security_group.this.id,
     ]
   }
 
+  # checkov:skip=CKV2_AWS_5: This SG is meant to be used by other modules
 }
 
 data "aws_iam_policy_document" "assume" {
@@ -181,6 +193,8 @@ resource "aws_lb" "this" {
   subnets            = var.lb_subnets
   load_balancer_type = "network"
   tags               = var.tags
+  # checkov:skip=CKV_AWS_152: No need for cross-zone load balancing when bastion only lives in a single AZ
+  # checkov:skip=CKV_AWS_150: We don't want deletion protection enabled on this LB
 }
 
 resource "aws_lb_target_group" "this" {
@@ -280,6 +294,17 @@ resource "aws_launch_configuration" "this" {
   security_groups = [aws_security_group.this.id]
 
   user_data = data.template_file.user_data.rendered
+
+  # Suggested by Checkov (CKV_AWS_79)
+  metadata_options {
+    http_endpoint = "enabled"
+    http_tokens   = "required"
+  }
+
+  # Suggested by Checkov (CKV_AWS_8)
+  root_block_device {
+    encrypted = true
+  }
 
   lifecycle {
     create_before_destroy = true
