@@ -1,6 +1,6 @@
 locals {
-  region         = coalesce(var.region, data.aws_region.current.name)
-  bastion_name   = "${var.vpc_name}-bastion"
+  region       = coalesce(var.region, data.aws_region.current.name)
+  bastion_name = "${var.vpc_name}-bastion"
 }
 
 data "aws_region" "current" {
