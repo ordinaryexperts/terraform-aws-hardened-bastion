@@ -33,7 +33,6 @@ resource "aws_security_group" "bastion_to_instance_sg" {
   name_prefix = "${local.bastion_name}-to-instance-sg-"
   vpc_id      = var.vpc_id
   tags        = var.tags
-  description = "SSH access from bastion to instances"
 
   ingress {
     description = "SSH ingress from bastion to instances"
@@ -45,5 +44,6 @@ resource "aws_security_group" "bastion_to_instance_sg" {
     ]
   }
 
+  # checkov:skip=CKV_AWS_23: Adding a description requires replacement of the SG, which cannot be done easily because it is used by other modules
   # checkov:skip=CKV2_AWS_5: This SG is meant to be used by other modules
 }
