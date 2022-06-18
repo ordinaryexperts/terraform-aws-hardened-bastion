@@ -1,6 +1,15 @@
 resource "aws_s3_bucket" "keys" {
   bucket = coalesce(var.bucket_name, "${local.bastion_name}-storage")
-  tags   = var.tags
+  tags = merge(var.tags, {
+    git_commit           = "3bac8ee07452fb00dead429bcb1e2985d898b483"
+    git_file             = "s3.tf"
+    git_last_modified_at = "2022-06-17 23:56:58"
+    git_last_modified_by = "jason.mcvetta@gmail.com"
+    git_modifiers        = "jason.mcvetta"
+    git_org              = "ordinaryexperts"
+    git_repo             = "terraform-aws-hardened-bastion"
+    yor_trace            = "f5a8b800-79e7-4bb2-b13d-cc48f8d0dc3e"
+  })
   # checkov:skip=CKV_AWS_18: No need for S3 bucket access logging, since only bastion can read this bucket
   # checkov:skip=CKV_AWS_144: No need for cross region replication since bastion is single-region
 }
@@ -51,7 +60,16 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "keys" {
 
 resource "aws_s3_bucket" "logs" {
   bucket = coalesce(var.bucket_name, "${local.bastion_name}-access-logs")
-  tags   = var.tags
+  tags = merge(var.tags, {
+    git_commit           = "3bac8ee07452fb00dead429bcb1e2985d898b483"
+    git_file             = "s3.tf"
+    git_last_modified_at = "2022-06-17 23:56:58"
+    git_last_modified_by = "jason.mcvetta@gmail.com"
+    git_modifiers        = "jason.mcvetta"
+    git_org              = "ordinaryexperts"
+    git_repo             = "terraform-aws-hardened-bastion"
+    yor_trace            = "6bbe14ad-80ca-4fd4-a479-336dbb693cae"
+  })
   # checkov:skip=CKV_AWS_18: No need for S3 bucket access logging, since only bastion can read this bucket
   # checkov:skip=CKV_AWS_144: No need for cross region replication since bastion is single-region
 }
