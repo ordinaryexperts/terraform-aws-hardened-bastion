@@ -18,12 +18,12 @@ data "aws_iam_policy_document" "assume" {
 data "aws_iam_policy_document" "role_policy" {
   statement {
     actions   = ["s3:GetObject"]
-    resources = ["arn:aws:s3:::${aws_s3_bucket.keys.bucket}/public-keys/*"]
+    resources = ["arn:aws:s3:::${aws_s3_bucket.this.bucket}/public-keys/*"]
     effect    = "Allow"
   }
   statement {
     actions   = ["s3:ListBucket"]
-    resources = ["arn:aws:s3:::${aws_s3_bucket.keys.bucket}"]
+    resources = ["arn:aws:s3:::${aws_s3_bucket.this.bucket}"]
     effect    = "Allow"
     condition {
       test     = "StringEquals"

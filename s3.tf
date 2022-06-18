@@ -1,4 +1,4 @@
-resource "aws_s3_bucket" "keys" {
+resource "aws_s3_bucket" "this" {
   bucket = coalesce(var.bucket_name, "${local.bastion_name}-storage")
   tags = merge(var.tags, {
     git_commit           = "3bac8ee07452fb00dead429bcb1e2985d898b483"
@@ -14,16 +14,16 @@ resource "aws_s3_bucket" "keys" {
   # checkov:skip=CKV_AWS_144: No need for cross region replication since bastion is single-region
 }
 
-resource "aws_s3_bucket_public_access_block" "keys" {
-  bucket                  = aws_s3_bucket.keys.id
+resource "aws_s3_bucket_public_access_block" "this" {
+  bucket                  = aws_s3_bucket.this.id
   block_public_acls       = true
   block_public_policy     = true
   ignore_public_acls      = true
   restrict_public_buckets = true
 }
 
-resource "aws_s3_bucket_acl" "keys" {
-  bucket = aws_s3_bucket.keys.id
+resource "aws_s3_bucket_acl" "this" {
+  bucket = aws_s3_bucket.this.id
   access_control_policy {
     grant {
       grantee {
@@ -40,15 +40,15 @@ resource "aws_s3_bucket_acl" "keys" {
   }
 }
 
-resource "aws_s3_bucket_versioning" "keys" {
-  bucket = aws_s3_bucket.keys.id
+resource "aws_s3_bucket_versioning" "this" {
+  bucket = aws_s3_bucket.this.id
   versioning_configuration {
     status = var.enable_bucket_versioning ? "Enabled" : "Disabled"
   }
 }
 
-resource "aws_s3_bucket_server_side_encryption_configuration" "keys" {
-  bucket = aws_s3_bucket.keys.bucket
+resource "aws_s3_bucket_server_side_encryption_configuration" "this" {
+  bucket = aws_s3_bucket.this.bucket
 
   rule {
     apply_server_side_encryption_by_default {
