@@ -58,7 +58,7 @@ data "aws_iam_policy_document" "logs" {
   statement {
     effect = "Allow"
     principals {
-      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current}:root"]
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
       type        = "AWS"
     }
     actions   = ["s3:PutObject"]
