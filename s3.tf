@@ -82,3 +82,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "logs" {
   }
 }
 
+resource "aws_s3_bucket_policy" "logs" {
+  bucket = aws_s3_bucket.logs.bucket
+  policy = data.aws_iam_policy_document.logs.json
+}

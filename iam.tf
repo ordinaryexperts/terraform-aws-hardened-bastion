@@ -53,3 +53,15 @@ resource "aws_iam_instance_profile" "this" {
   path        = "/bastion/"
   tags        = var.tags
 }
+
+data "aws_iam_policy_document" "logs" {
+  statement {
+    effect = "Allow"
+    principals {
+      identifiers = ["arn:aws:iam::${data.aws_canonical_user_id.current_user}:root"]
+      type        = "AWS"
+    }
+    actions   = ["s3:PutObject"]
+    resources = ["${aws_s3_bucket.logs.arn}/*"]
+  }
+}
