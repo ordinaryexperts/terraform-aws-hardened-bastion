@@ -3,7 +3,6 @@ Unreleased
 
 * Security hardening with Ansible role `geerlingguy.security`
 * Remediate Checkov warnings
-* Yor tagging
 
 2.1.0
 =====
