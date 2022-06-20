@@ -1,6 +1,8 @@
 Unreleased
 ==========
 
+* Bump AWS Provider version to 4.x
+
 2.2.0
 =====
 
