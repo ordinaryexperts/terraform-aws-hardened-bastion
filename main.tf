@@ -31,6 +31,7 @@ data "template_file" "user_data" {
     aws_region        = local.region
     bucket_name       = aws_s3_bucket.this.bucket
     sync_users_script = data.template_file.sync_users.rendered
+    sudoers           = jsonencode(var.sudoers)
   }
 }
 
@@ -242,6 +243,11 @@ resource "aws_autoscaling_group" "this" {
   termination_policies = ["OldestLaunchConfiguration"]
   force_delete         = true
 
+  instance_refresh {
+    strategy = "Rolling"
+    triggers = ["tag"]
+  }
+
   tag {
     key                 = "Name"
     value               = aws_launch_configuration.this.name
@@ -277,11 +283,5 @@ resource "aws_launch_configuration" "this" {
 
   lifecycle {
     create_before_destroy = true
-
-    # If we do not ignore changes, user_data will be updated on every apply,
-    # even if nothing has changed.
-    ignore_changes = [user_data]
   }
 }
-
-# TODO: harden the instances, add route 53 entries

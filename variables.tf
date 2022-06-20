@@ -49,7 +49,7 @@ variable "min_count" {
 
 variable "instance_type" {
   description = "Instance type for the bastion host. Default = t2.nano"
-  default     = "t2.nano"
+  default     = "t3a.micro" # nano is too weak to run ansible role geerlingguy.security
 }
 
 variable "associate_public_ip_address" {
@@ -83,4 +83,10 @@ variable "tags" {
 variable "vpc_name" {
   type        = string
   description = "Name of the VPC this bastion serves"
+}
+
+variable "sudoers" {
+  type        = list(string)
+  description = "Usernames that will be granted passwordless sudo privilege"
+  default     = []
 }
