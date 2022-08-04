@@ -273,7 +273,7 @@ resource "aws_launch_configuration" "this" {
   user_data = templatefile("${path.module}/user_data.sh.tmpl", {
     aws_region        = local.region
     bucket_name       = aws_s3_bucket.this.bucket
-    sync_users_script = data.template_file.sync_users.rendered
+#    sync_users_script = data.template_file.sync_users.rendered
     sudoers           = jsonencode(var.sudoers)
   })
 
