@@ -24,31 +24,31 @@ data "aws_ami" "amazonlinux" {
   }
 }
 
-data "template_file" "user_data" {
-  template = file("${path.module}/user_data.sh.tmpl")
-
-  vars = {
-    aws_region        = local.region
-    bucket_name       = aws_s3_bucket.this.bucket
-    sync_users_script = data.template_file.sync_users.rendered
-    sudoers           = jsonencode(var.sudoers)
-  }
-}
-
-data "template_file" "sync_users" {
-  template = file("${path.module}/sync_users.sh.tmpl")
-
-  vars = {
-    aws_region  = local.region
-    bucket_name = aws_s3_bucket.this.bucket
-  }
-}
+# FIXME: This template file is unused
+#
+#data "template_file" "sync_users" {
+#  template = file("${path.module}/sync_users.sh.tmpl")
+#
+#  vars = {
+#    aws_region  = local.region
+#    bucket_name = aws_s3_bucket.this.bucket
+#  }
+#}
 
 data "aws_canonical_user_id" "current_user" {}
 
 resource "aws_s3_bucket" "this" {
   bucket = coalesce(var.bucket_name, "${local.bastion_name}-storage")
-  tags   = var.tags
+  tags = merge(var.tags, {
+    git_commit           = "6827c936ba5b32b7b0cfe969ee4bd6a673f7a4c8"
+    git_file             = "main.tf"
+    git_last_modified_at = "2022-08-04 17:45:31"
+    git_last_modified_by = "jason.mcvetta@gmail.com"
+    git_modifiers        = "jason.mcvetta"
+    git_org              = "ordinaryexperts"
+    git_repo             = "terraform-aws-hardened-bastion"
+    yor_trace            = "408863f0-cf20-4887-9ac9-48bd5c1649ef"
+  })
 }
 
 resource "aws_s3_bucket_acl" "this" {
@@ -80,7 +80,16 @@ resource "aws_security_group" "this" {
   name_prefix = "${local.bastion_name}-sg-"
   vpc_id      = var.vpc_id
   description = "Bastion security group (only SSH inbound access is allowed)"
-  tags        = var.tags
+  tags = merge(var.tags, {
+    git_commit           = "6827c936ba5b32b7b0cfe969ee4bd6a673f7a4c8"
+    git_file             = "main.tf"
+    git_last_modified_at = "2022-08-04 17:45:31"
+    git_last_modified_by = "jason.mcvetta@gmail.com"
+    git_modifiers        = "jason.mcvetta"
+    git_org              = "ordinaryexperts"
+    git_repo             = "terraform-aws-hardened-bastion"
+    yor_trace            = "6d18149d-3a88-4b16-bdd3-4ccde8692c8e"
+  })
 
   # Only 22 inbound
   ingress {
@@ -108,7 +117,16 @@ resource "aws_security_group" "this" {
 resource "aws_security_group" "bastion_to_instance_sg" {
   name_prefix = "${local.bastion_name}-to-instance-sg-"
   vpc_id      = var.vpc_id
-  tags        = var.tags
+  tags = merge(var.tags, {
+    git_commit           = "6827c936ba5b32b7b0cfe969ee4bd6a673f7a4c8"
+    git_file             = "main.tf"
+    git_last_modified_at = "2022-08-04 17:45:31"
+    git_last_modified_by = "jason.mcvetta@gmail.com"
+    git_modifiers        = "jason.mcvetta"
+    git_org              = "ordinaryexperts"
+    git_repo             = "terraform-aws-hardened-bastion"
+    yor_trace            = "3e507025-ce80-4c21-b7b8-876ffacd460b"
+  })
 
   ingress {
     protocol  = "tcp"
@@ -159,7 +177,16 @@ data "aws_iam_policy_document" "role_policy" {
 resource "aws_iam_role" "this" {
   name_prefix = "${local.bastion_name}-role-"
   path        = "/bastion/"
-  tags        = var.tags
+  tags = merge(var.tags, {
+    git_commit           = "6827c936ba5b32b7b0cfe969ee4bd6a673f7a4c8"
+    git_file             = "main.tf"
+    git_last_modified_at = "2022-08-04 17:45:31"
+    git_last_modified_by = "jason.mcvetta@gmail.com"
+    git_modifiers        = "jason.mcvetta"
+    git_org              = "ordinaryexperts"
+    git_repo             = "terraform-aws-hardened-bastion"
+    yor_trace            = "47cd1e1b-652a-4672-b360-e41750626260"
+  })
 
   assume_role_policy = data.aws_iam_policy_document.assume.json
 }
@@ -174,13 +201,31 @@ resource "aws_iam_instance_profile" "this" {
   name_prefix = "${local.bastion_name}-profile-"
   role        = aws_iam_role.this.name
   path        = "/bastion/"
-  tags        = var.tags
+  tags = merge(var.tags, {
+    git_commit           = "6827c936ba5b32b7b0cfe969ee4bd6a673f7a4c8"
+    git_file             = "main.tf"
+    git_last_modified_at = "2022-08-04 17:45:31"
+    git_last_modified_by = "jason.mcvetta@gmail.com"
+    git_modifiers        = "jason.mcvetta"
+    git_org              = "ordinaryexperts"
+    git_repo             = "terraform-aws-hardened-bastion"
+    yor_trace            = "f7f57de9-5b6b-4cbb-99ec-2287a5f64d3b"
+  })
 }
 
 resource "aws_lb" "this" {
   subnets            = var.lb_subnets
   load_balancer_type = "network"
-  tags               = var.tags
+  tags = merge(var.tags, {
+    git_commit           = "6827c936ba5b32b7b0cfe969ee4bd6a673f7a4c8"
+    git_file             = "main.tf"
+    git_last_modified_at = "2022-08-04 17:45:31"
+    git_last_modified_by = "jason.mcvetta@gmail.com"
+    git_modifiers        = "jason.mcvetta"
+    git_org              = "ordinaryexperts"
+    git_repo             = "terraform-aws-hardened-bastion"
+    yor_trace            = "caa4540c-dd76-4fd4-bfb4-eebf1799a89f"
+  })
 }
 
 resource "aws_lb_target_group" "this" {
@@ -189,7 +234,16 @@ resource "aws_lb_target_group" "this" {
   vpc_id               = var.vpc_id
   target_type          = "instance"
   deregistration_delay = 0
-  tags                 = var.tags
+  tags = merge(var.tags, {
+    git_commit           = "6827c936ba5b32b7b0cfe969ee4bd6a673f7a4c8"
+    git_file             = "main.tf"
+    git_last_modified_at = "2022-08-04 17:45:31"
+    git_last_modified_by = "jason.mcvetta@gmail.com"
+    git_modifiers        = "jason.mcvetta"
+    git_org              = "ordinaryexperts"
+    git_repo             = "terraform-aws-hardened-bastion"
+    yor_trace            = "7f8fba85-797d-4893-b7a9-7a3cdd31d9d6"
+  })
 
   health_check {
     port     = "traffic-port"
@@ -206,7 +260,16 @@ resource "aws_lb_listener" "ssh" {
   load_balancer_arn = aws_lb.this.arn
   port              = 22
   protocol          = "TCP"
-  tags              = var.tags
+  tags = merge(var.tags, {
+    git_commit           = "6827c936ba5b32b7b0cfe969ee4bd6a673f7a4c8"
+    git_file             = "main.tf"
+    git_last_modified_at = "2022-08-04 17:45:31"
+    git_last_modified_by = "jason.mcvetta@gmail.com"
+    git_modifiers        = "jason.mcvetta"
+    git_org              = "ordinaryexperts"
+    git_repo             = "terraform-aws-hardened-bastion"
+    yor_trace            = "03a255f1-a47c-45bd-afe4-a072b4a83a4d"
+  })
 }
 
 data "aws_route53_zone" "nlb" {
@@ -279,7 +342,12 @@ resource "aws_launch_configuration" "this" {
 
   security_groups = [aws_security_group.this.id]
 
-  user_data = data.template_file.user_data.rendered
+  user_data = templatefile("${path.module}/user_data.sh.tmpl", {
+    aws_region  = local.region
+    bucket_name = aws_s3_bucket.this.bucket
+    #    sync_users_script = data.template_file.sync_users.rendered
+    sudoers = jsonencode(var.sudoers)
+  })
 
   lifecycle {
     create_before_destroy = true
