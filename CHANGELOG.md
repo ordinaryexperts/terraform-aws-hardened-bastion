@@ -1,6 +1,8 @@
 Unreleased
 ==========
 
+* Remediate Checkov warnings
+
 2.3.0
 =====
 
