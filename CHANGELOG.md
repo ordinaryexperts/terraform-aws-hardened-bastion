@@ -1,6 +1,8 @@
 Unreleased
 ==========
 
+* Remediate Checkov alerts
+
 2.6.0
 =====
 
