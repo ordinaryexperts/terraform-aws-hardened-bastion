@@ -1,7 +1,11 @@
 Unreleased
 ==========
 
-* Rolled back to release 2.3.0 - release 2.4.0 was premature
+2.5.0
+=====
+
+* Rolled back to release 2.3.0 - release 2.4.0 was premature.  This release is
+  identical to release 2.3.0.
 
 2.3.0
 =====
