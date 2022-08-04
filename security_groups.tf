@@ -2,7 +2,16 @@ resource "aws_security_group" "this" {
   name_prefix = "${local.bastion_name}-sg-"
   vpc_id      = var.vpc_id
   description = "Bastion security group (only SSH inbound access is allowed)"
-  tags        = var.tags
+  tags = merge(var.tags, {
+    git_commit           = "706b4ea96c8f50f753a62e446a719b3476036c0d"
+    git_file             = "security_groups.tf"
+    git_last_modified_at = "2022-08-04 16:54:01"
+    git_last_modified_by = "jason.mcvetta@gmail.com"
+    git_modifiers        = "jason.mcvetta"
+    git_org              = "ordinaryexperts"
+    git_repo             = "terraform-aws-hardened-bastion"
+    yor_trace            = "999c9b1d-0db5-428b-8152-176317c5bada"
+  })
 
   # Only 22 inbound
   ingress {
@@ -32,7 +41,16 @@ resource "aws_security_group" "this" {
 resource "aws_security_group" "bastion_to_instance_sg" {
   name_prefix = "${local.bastion_name}-to-instance-sg-"
   vpc_id      = var.vpc_id
-  tags        = var.tags
+  tags = merge(var.tags, {
+    git_commit           = "706b4ea96c8f50f753a62e446a719b3476036c0d"
+    git_file             = "security_groups.tf"
+    git_last_modified_at = "2022-08-04 16:54:01"
+    git_last_modified_by = "jason.mcvetta@gmail.com"
+    git_modifiers        = "jason.mcvetta"
+    git_org              = "ordinaryexperts"
+    git_repo             = "terraform-aws-hardened-bastion"
+    yor_trace            = "bff4ae6a-e404-46f1-abc5-23d2fe68b524"
+  })
 
   ingress {
     description = "SSH ingress from bastion to instances"
