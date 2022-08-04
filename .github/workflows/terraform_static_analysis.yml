@@ -16,11 +16,10 @@ jobs:
 
     steps:
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Checkov baseline static analysis
         id: checkov
         uses: bridgecrewio/checkov-action@master
         with:
-          baseline: .checkov.baseline
           quiet: true
