@@ -24,17 +24,6 @@ data "aws_ami" "amazonlinux" {
   }
 }
 
-data "template_file" "user_data" {
-  template = file("${path.module}/user_data.sh.tmpl")
-
-  vars = {
-    aws_region        = local.region
-    bucket_name       = aws_s3_bucket.this.bucket
-    sync_users_script = data.template_file.sync_users.rendered
-    sudoers           = jsonencode(var.sudoers)
-  }
-}
-
 data "template_file" "sync_users" {
   template = file("${path.module}/sync_users.sh.tmpl")
 
@@ -279,7 +268,12 @@ resource "aws_launch_configuration" "this" {
 
   security_groups = [aws_security_group.this.id]
 
-  user_data = data.template_file.user_data.rendered
+  user_data = templatefile("${path.module}/user_data.sh.tmpl", {
+    aws_region        = local.region
+    bucket_name       = aws_s3_bucket.this.bucket
+    sync_users_script = data.template_file.sync_users.rendered
+    sudoers           = jsonencode(var.sudoers)
+  })
 
   lifecycle {
     create_before_destroy = true
