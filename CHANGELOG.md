@@ -1,6 +1,8 @@
 Unreleased
 ==========
 
+* Remediate Checkov warnings
+
 2.3.0
 =====
 
@@ -10,7 +12,6 @@ Unreleased
 =====
 
 * Security hardening with Ansible role `geerlingguy.security`
-* Remediate Checkov warnings
 
 2.1.0
 =====
