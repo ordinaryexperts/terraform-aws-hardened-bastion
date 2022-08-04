@@ -1,10 +1,7 @@
 Unreleased
 ==========
 
-2.4.0
-=====
-
-* Remediate Checkov warnings
+* Rolled back to release 2.3.0 - release 2.4.0 was premature
 
 2.3.0
 =====
