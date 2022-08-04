@@ -1,6 +1,8 @@
 Unreleased
 ==========
 
+* Use `templatefile()` function instead of `template_file` data source.
+
 2.5.0
 =====
 
