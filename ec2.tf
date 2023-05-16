@@ -65,6 +65,10 @@ resource "aws_launch_configuration" "this" {
 
   security_groups = [aws_security_group.this.id]
 
+  root_block_device {
+    encrypted = true
+  }
+
   user_data = templatefile("${path.module}/user_data.sh.tmpl", {
     aws_region  = local.region
     bucket_name = aws_s3_bucket.this.bucket
