@@ -1,26 +1,66 @@
 {
     "failed_checks": [
         {
-            "file": "/main.tf",
+            "file": "/.github/workflows/terraform_validation.yml",
+            "findings": [
+                {
+                    "resource": "on(Terraform Validation)",
+                    "check_ids": [
+                        "CKV2_GHA_1"
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "/ec2.tf",
+            "findings": [
+                {
+                    "resource": "aws_autoscaling_group.this",
+                    "check_ids": [
+                        "CKV_AWS_315"
+                    ]
+                },
+                {
+                    "resource": "aws_launch_configuration.this",
+                    "check_ids": [
+                        "CKV_AWS_79",
+                        "CKV_AWS_8"
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "/load_balancer.tf",
+            "findings": [
+                {
+                    "resource": "aws_lb.this",
+                    "check_ids": [
+                        "CKV_AWS_150",
+                        "CKV_AWS_152",
+                        "CKV_AWS_91"
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "/s3.tf",
             "findings": [
                 {
                     "resource": "aws_s3_bucket.this",
                     "check_ids": [
-                        "CKV2_AWS_40",
-                        "CKV2_AWS_41",
                         "CKV2_AWS_6",
+                        "CKV2_AWS_61",
+                        "CKV2_AWS_62",
                         "CKV_AWS_144",
                         "CKV_AWS_145",
-                        "CKV_AWS_18",
-                        "CKV_AWS_19"
+                        "CKV_AWS_18"
                     ]
-                },
-                {
-                    "resource": "aws_security_group.this",
-                    "check_ids": [
-                        "CKV_AWS_23"
-                    ]
-                },
+                }
+            ]
+        },
+        {
+            "file": "/security_groups.tf",
+            "findings": [
                 {
                     "resource": "aws_security_group.bastion_to_instance_sg",
                     "check_ids": [
@@ -29,18 +69,10 @@
                     ]
                 },
                 {
-                    "resource": "aws_lb.this",
+                    "resource": "aws_security_group.this",
                     "check_ids": [
-                        "CKV_AWS_150",
-                        "CKV_AWS_152",
-                        "CKV_AWS_91"
-                    ]
-                },
-                {
-                    "resource": "aws_launch_configuration.this",
-                    "check_ids": [
-                        "CKV_AWS_79",
-                        "CKV_AWS_8"
+                        "CKV_AWS_23",
+                        "CKV_AWS_24"
                     ]
                 }
             ]
