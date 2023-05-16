@@ -1,3 +1,12 @@
+# Changelog
+
+## [2.7.0](https://github.com/ordinaryexperts/terraform-aws-hardened-bastion/compare/2.6.0...v2.7.0) (2023-05-16)
+
+
+### Features
+
+* Enable root EBS volume encryption ([#22](https://github.com/ordinaryexperts/terraform-aws-hardened-bastion/issues/22)) ([b5b3135](https://github.com/ordinaryexperts/terraform-aws-hardened-bastion/commit/b5b313535e309e529788c74437a47128d3d38286))
+
 Unreleased
 ==========
 
