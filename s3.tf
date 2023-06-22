@@ -12,24 +12,6 @@ resource "aws_s3_bucket" "this" {
   })
 }
 
-resource "aws_s3_bucket_acl" "this" {
-  bucket = aws_s3_bucket.this.id
-  access_control_policy {
-    grant {
-      grantee {
-        id   = data.aws_canonical_user_id.current_user.id
-        type = "CanonicalUser"
-      }
-      permission = "FULL_CONTROL"
-    }
-
-    owner {
-      id = data.aws_canonical_user_id.current_user.id
-    }
-
-  }
-}
-
 resource "aws_s3_bucket_versioning" "this" {
   bucket = aws_s3_bucket.this.id
   versioning_configuration {
