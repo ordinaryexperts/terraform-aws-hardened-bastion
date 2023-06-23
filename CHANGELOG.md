@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.7.1](https://github.com/ordinaryexperts/terraform-aws-hardened-bastion/compare/v2.7.0...v2.7.1) (2023-06-23)
+
+
+### Bug Fixes
+
+* remove obsolete S3 bucket ACL resource ([#25](https://github.com/ordinaryexperts/terraform-aws-hardened-bastion/issues/25)) ([304616d](https://github.com/ordinaryexperts/terraform-aws-hardened-bastion/commit/304616d8db6bbf45eb46deea81830c4107474db0))
+
 ## [2.7.0](https://github.com/ordinaryexperts/terraform-aws-hardened-bastion/compare/2.6.0...v2.7.0) (2023-05-16)
 
 
