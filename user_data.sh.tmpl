@@ -72,6 +72,10 @@ rm ~/mycron
 #-------------------------------------------------------------------------------
 
 yum -y update --security
+
+# Update SSM Agent
+yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
+
 yum install -y python3-pip
 pip3 install ansible
 ansible-galaxy install geerlingguy.security
