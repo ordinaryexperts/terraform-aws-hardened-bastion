@@ -87,6 +87,17 @@ cat > ~/playbook.yaml << EOF
     security_sudoers_passwordless: ${sudoers}
   roles:
     - geerlingguy.security
+  tasks:
+    - name: Install convenience packages
+      yum:
+        name:
+          - byobu
+          - htop
+          - postgresql
+          - telnet
+          - vim
+        state: latest
+        update_cache: true
 EOF
 
 ansible-playbook ~/playbook.yaml
