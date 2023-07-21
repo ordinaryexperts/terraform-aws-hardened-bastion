@@ -85,6 +85,8 @@ cat > ~/playbook.yaml << EOF
   gather_facts: true
   vars:
     security_sudoers_passwordless: ${sudoers}
+    # fail2ban is not properly supported by AL2023 - https://repost.aws/questions/QU_Mw5I44TQ_ucMNb73Lakbw/fail2ban-mia-for-amazon-linux-2023
+    security_install_fail2ban: false
   roles:
     - geerlingguy.security
 EOF
