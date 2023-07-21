@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.8.0](https://github.com/ordinaryexperts/terraform-aws-hardened-bastion/compare/v2.7.1...v2.8.0) (2023-07-21)
+
+
+### Features
+
+* install the latest SSM agent ([646fd6e](https://github.com/ordinaryexperts/terraform-aws-hardened-bastion/commit/646fd6efe25a491f75c0abbd1ce8278ec3398d61))
+
 ## [2.7.1](https://github.com/ordinaryexperts/terraform-aws-hardened-bastion/compare/v2.7.0...v2.7.1) (2023-06-23)
 
 
