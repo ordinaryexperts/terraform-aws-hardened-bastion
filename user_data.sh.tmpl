@@ -80,6 +80,8 @@ yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/li
 pip3 install ansible
 ansible-galaxy install geerlingguy.security
 
+yum install -y byobu htop postgresql telnet vim
+
 cat > ~/playbook.yaml << EOF
 - hosts: localhost
   gather_facts: true
@@ -87,19 +89,6 @@ cat > ~/playbook.yaml << EOF
     security_sudoers_passwordless: ${sudoers}
   roles:
     - geerlingguy.security
-  tasks:
-    - name: Install convenience packages
-      yum:
-        name:
-          - byobu
-          - htop
-          - postgresql
-          - telnet
-          - vim
-        state: latest
-        update_cache: true
 EOF
 
 ansible-playbook ~/playbook.yaml
-
-
