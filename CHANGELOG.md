@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.9.0](https://github.com/ordinaryexperts/terraform-aws-hardened-bastion/compare/v2.8.0...v2.9.0) (2023-07-22)
+
+
+### Features
+
+* install convenience packages ([#30](https://github.com/ordinaryexperts/terraform-aws-hardened-bastion/issues/30)) ([01b0356](https://github.com/ordinaryexperts/terraform-aws-hardened-bastion/commit/01b0356a122853ebce3602935ade7561be35730a))
+
 ## [2.8.0](https://github.com/ordinaryexperts/terraform-aws-hardened-bastion/compare/v2.7.1...v2.8.0) (2023-07-21)
 
 
